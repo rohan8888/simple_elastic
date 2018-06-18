@@ -35,7 +35,15 @@ const writeIndexesToDisk = async function(indexes){
     for(let idx in indexes){
         let fileExists = await F.doesIndexExist(idx + ".json");
         if(fileExists){
-
+            let content = await F.readIndex(idx + ".json");
+            let i = U.getFileIndex(indexes[idx]["id"], content.docs);
+            if(i !== -1){
+                content.docs[i] = indexes[idx];
+            }else{
+                content.docs.push(indexes[idx]);
+                content["IDF"] = U.idf(C.get("total_docs"), content.docs.length);
+            }
+            await F.saveIndexes(idx + ".json", JSON.stringify(content));
         }else{
             let content = U.defaultIndexContent();
             content["docs"].push(indexes[idx]);
