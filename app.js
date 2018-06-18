@@ -32,7 +32,7 @@ app.route("/search").get(function(req, res, next){
 
 /*
 * Default error handler
-* */
+*/
 app.use((err, req, res) => res.json(err));
 
 app.listen({"host": host, "port": port}, () => console.log(`Server listening on ${host}:${port}`));
