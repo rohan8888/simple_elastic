@@ -27,7 +27,9 @@ const searchIndexes = async function (query) {
         // fileList = fileList.concat(result.docs);
     }
     let files = U.getFilesFromIndex(fileList);
-    return await getFilesFromIndex(files);
+    let finalResults =  await getFilesFromIndex(files);
+    C.set(query.q, finalResults);
+    return finalResults;
 };
 
 
