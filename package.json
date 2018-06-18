@@ -1,0 +1,15 @@
+{
+  "name": "simple_elastic",
+  "version": "1.0.0",
+  "description": "A simple disk search poc which allows basic indexing and searching",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "search",
+    "index"
+  ],
+  "author": "Rohan Awad",
+  "license": "ISC"
+}
