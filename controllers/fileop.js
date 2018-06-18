@@ -17,6 +17,12 @@ const doesIndexExist = function (fileName, cb) {
     })
 };
 
+const readFile = function(fileName, cb){
+    fs.readFile(fileDir + fileName, (err, data) => {
+        cb(null, JSON.parse(data));
+    })
+};
+
 const readIndex = function (fileName, cb) {
     fs.readFile(indexDir + fileName, (err, data) => {
         cb(null, JSON.parse(data));
@@ -28,5 +34,6 @@ module.exports = {
     getNumberOfDocuments: promisify(getNumberOfDocuments),
     doesIndexExist: promisify(doesIndexExist),
     readIndex: promisify(readIndex),
-    saveIndexes: promisify(saveIndexes)
+    saveIndexes: promisify(saveIndexes),
+    readFile: promisify(readFile)
 };

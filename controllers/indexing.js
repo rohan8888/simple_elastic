@@ -10,6 +10,7 @@ const prepareIndexMeta = function (payload) {
     indexes = titleWords.reduce((idx, w, i) => {
         indexes[w] = indexes[w] || U.defaultIndex(payload.id);
         indexes[w]["count"]++;
+        indexes[w]["inTitle"]++;
         indexes[w]["titlePos"].push(i);
         indexes[w]["TF"] = (indexes[w]["count"] / titleWords.length).toFixed(2);
 
@@ -43,6 +44,7 @@ const writeIndexesToDisk = async function(indexes){
                 content.docs.push(indexes[idx]);
                 content["IDF"] = U.idf(C.get("total_docs"), content.docs.length);
             }
+            content.docs = U.sortByTermFrequency(content.docs);
             await F.saveIndexes(idx + ".json", JSON.stringify(content));
         }else{
             let content = U.defaultIndexContent();
@@ -53,8 +55,8 @@ const writeIndexesToDisk = async function(indexes){
     }
 };
 
-const writeFileAndUpdateIndex = async function (payload, next) {
-    if (!payload.id || !payload.title || !payload.data) return next("invalid input");
+const writeFileAndUpdateIndex = async function (payload) {
+    if (!payload.id || !payload.title || !payload.data) throw "invalid input";
 
     let fileName = payload.id + ".txt";
     let content = JSON.stringify(payload);
@@ -63,7 +65,6 @@ const writeFileAndUpdateIndex = async function (payload, next) {
     const indexes = prepareIndexMeta(payload);
 
     await writeIndexesToDisk(indexes);
-    next(null, "200 OK");
 };
 
 module.exports = {

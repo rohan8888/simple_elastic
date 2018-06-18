@@ -3,6 +3,7 @@ const app = express();
 const bodyParser = require("body-parser");
 
 const idx = require("./controllers/indexing");
+const search = require("./controllers/search");
 
 const host = "localhost";
 const port = 3000;
@@ -18,16 +19,25 @@ app.use(bodyParser.urlencoded({
 * 2. title
 * 3. data
 * */
-app.route("/index").post(function(req, res, next){
-    idx.writeFileAndUpdateIndex(req.body, (e, r) => {
-        if(e) return next(e);
-
-        res.json(r);
-    });
+app.route("/index").post(async function (req, res, next) {
+    try {
+        await idx.writeFileAndUpdateIndex(req.body);
+        return res.json("200 OK");
+    } catch (err) {
+        next(err);
+    }
 });
 
-app.route("/search").get(function(req, res, next){
-
+/*
+* Must specify search parameter using `q` parameter in querystring
+* */
+app.route("/search").get(async function (req, res, next) {
+    try {
+        let results = await search.searchIndexes(req.query);
+        return res.json(results);
+    } catch (err) {
+        next(err);
+    }
 });
 
 /*
