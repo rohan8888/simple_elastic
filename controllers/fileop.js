@@ -18,7 +18,7 @@ const doesIndexExist = function (fileName, cb) {
 };
 
 const readIndex = function (fileName, cb) {
-    fs.readFile(indexDir + fileName + ".json", (err, data) => {
+    fs.readFile(indexDir + fileName, (err, data) => {
         cb(null, JSON.parse(data));
     })
 };
