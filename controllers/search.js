@@ -24,7 +24,6 @@ const searchIndexes = async function (query) {
         if(!result) continue;
 
         fileList = U.union(fileList, result.docs);
-        // fileList = fileList.concat(result.docs);
     }
     let files = U.getFilesFromIndex(fileList);
     let finalResults =  await getFilesFromIndex(files);
