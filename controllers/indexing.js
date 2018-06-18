@@ -29,18 +29,18 @@ const prepareIndexMeta = function (payload) {
     return indexes;
 };
 
-const writeIndexesToDisk = async function(indexes, next){
+const writeIndexesToDisk = async function(indexes){
     let f = await F.getNumberOfDocuments();
     C.set("total_docs", f);
     for(let idx in indexes){
-        let fileExists = await F.doesFileExist(idx + ".json");
+        let fileExists = await F.doesIndexExist(idx + ".json");
         if(fileExists){
 
         }else{
             let content = U.defaultIndexContent();
             content["docs"].push(indexes[idx]);
             content["IDF"] = U.idf(C.get("total_docs"), 1);
-            await F.writeToDisk(idx + ".json", JSON.stringify(content))
+            await F.saveIndexes(idx + ".json", JSON.stringify(content))
         }
     }
 };
@@ -54,7 +54,8 @@ const writeFileAndUpdateIndex = async function (payload, next) {
     await F.writeToDisk(fileName, content);
     const indexes = prepareIndexMeta(payload);
 
-    await writeIndexesToDisk(indexes, next);
+    await writeIndexesToDisk(indexes);
+    next(null, "200 OK");
 };
 
 module.exports = {

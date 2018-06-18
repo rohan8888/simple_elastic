@@ -5,10 +5,12 @@ const indexDir = process.cwd() + "/indexes/";
 
 const writeToDisk = (fileName, content, next) => fs.writeFile(fileDir + fileName, content, next);
 
+const saveIndexes = (fileName, content, next) => fs.writeFile(indexDir + fileName, content, next);
+
 const getNumberOfDocuments = (cb) => fs.readdir(fileDir, (err, files) => cb(null, files.length));
 
-const doesFileExist = function (fileName, cb) {
-    fs.stat(fileDir + fileName, (err, s) => {
+const doesIndexExist = function (fileName, cb) {
+    fs.stat(indexDir + fileName, (err, s) => {
         if (err) return cb(null, false);
 
         cb(null, true);
@@ -16,7 +18,7 @@ const doesFileExist = function (fileName, cb) {
 };
 
 const readIndex = function (fileName, cb) {
-    fs.readFile(fileDir + fileName + ".json", (err, data) => {
+    fs.readFile(indexDir + fileName + ".json", (err, data) => {
         cb(null, JSON.parse(data));
     })
 };
@@ -24,6 +26,7 @@ const readIndex = function (fileName, cb) {
 module.exports = {
     writeToDisk: promisify(writeToDisk),
     getNumberOfDocuments: promisify(getNumberOfDocuments),
-    doesFileExist: promisify(doesFileExist),
-    readIndex: promisify(readIndex)
+    doesIndexExist: promisify(doesIndexExist),
+    readIndex: promisify(readIndex),
+    saveIndexes: promisify(saveIndexes)
 };
