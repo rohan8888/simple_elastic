@@ -21,6 +21,8 @@ const searchIndexes = async function (query) {
     let fileList = [];
     for (let i in searchTerms) {
         let result = await F.readIndex(searchTerms[i] + ".json");
+        if(!result) continue;
+
         fileList = U.union(fileList, result.docs);
         // fileList = fileList.concat(result.docs);
     }

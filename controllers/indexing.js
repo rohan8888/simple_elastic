@@ -58,10 +58,7 @@ const writeIndexesToDisk = async function(indexes){
 const writeFileAndUpdateIndex = async function (payload) {
     if (!payload.id || !payload.title || !payload.data) throw "invalid input";
 
-    let fileName = payload.id + ".txt";
-    let content = JSON.stringify(payload);
-
-    await F.writeToDisk(fileName, content);
+    await F.writeDocumentToDisk(payload.id + ".txt", JSON.stringify(payload));
     const indexes = prepareIndexMeta(payload);
 
     await writeIndexesToDisk(indexes);
